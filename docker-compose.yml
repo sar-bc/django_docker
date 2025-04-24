@@ -11,7 +11,7 @@ services:
   app:
     container_name: helloworld
     image: crccheck/hello-world
-    
+
   nginx:
     container_name: nginx
     image: nginx:latest
@@ -25,11 +25,11 @@ services:
       - ./certbot/www:/var/www/certbot
   
 
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    command: certbot certonly --webroot -w /var/www/certbot --email sar-bc@mail.ru -d django.sar-bc.ru --agree-tos --force-renewal
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - ./certbot/conf:/etc/letsencrypt
+  #     - ./certbot/www:/var/www/certbot
+  #   command: certbot certonly --webroot -w /var/www/certbot --email sar-bc@mail.ru -d django.sar-bc.ru --agree-tos --force-renewal
 
