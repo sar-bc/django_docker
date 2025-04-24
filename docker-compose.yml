@@ -6,7 +6,7 @@ services:
     build: ./app  # Построение образа Django из Dockerfile в папке ./app
     command: gunicorn vik.wsgi:application --bind 0.0.0.0:8000  # Запуск приложения с помощью Gunicorn
     volumes:
-      - ./app:/code  # Монтирование локальной папки ./app в контейнер
+      - ./app:/app  # Монтирование локальной папки ./app в контейнер
     expose:
       - "8000"  # Указывает, что контейнер слушает на порту 8000 (только для связи между контейнерами)
 
