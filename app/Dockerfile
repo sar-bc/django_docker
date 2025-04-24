@@ -13,12 +13,10 @@ RUN apt-get update && \
 
 # Копирование файла requirements.txt и установка зависимостей
 COPY requirements.txt /app/
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Копирование всего кода приложения
 COPY . .
 
-# Запуск приложения
-# CMD ["python", "main.py"]
+# Запуск приложения с помощью gunicorn
 CMD ["gunicorn", "vik.wsgi:application", "--bind", "0.0.0.0:8000"]
-
