@@ -11,6 +11,8 @@ services:
   app:
     container_name: helloworld
     image: crccheck/hello-world
+    expose:
+      - 8000
 
   nginx:
     container_name: nginx
