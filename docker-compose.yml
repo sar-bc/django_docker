@@ -31,4 +31,5 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    command: certbot --webroot -w /var/www/certbot --force-renewal --email sar-bc@mail.ru -d django.sar-bc.ru --agree-tos
+    command: certbot certonly --webroot -w /var/www/certbot --email sar-bc@mail.ru -d django.sar-bc.ru --agree-tos --force-renewal
+
