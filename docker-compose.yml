@@ -1,14 +1,16 @@
 version: '3.8'
 
 services:
+  # app:
+  #   build: ./app
+  #   command: gunicorn vik.wsgi:application --bind 0.0.0.0:8000
+  #   volumes:
+  #     - ./app:/code
+  #   expose:
+  #     - "8000"
   app:
-    build: ./app
-    command: gunicorn vik.wsgi:application --bind 0.0.0.0:8000
-    volumes:
-      - ./app:/code
-    expose:
-      - "8000"
-
+    container_name: helloworld
+    image: crccheck/hello-world
   nginx:
     container_name: nginx
     image: nginx:latest
