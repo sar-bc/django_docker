@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   app:
+    container_name: app
     build: ./app  # Построение образа Django из Dockerfile в папке ./app
     command: gunicorn vik.wsgi:application --bind 0.0.0.0:8000  # Запуск приложения с помощью Gunicorn
     volumes:
