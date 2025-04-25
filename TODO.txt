@@ -3,3 +3,6 @@ docker rm $(docker ps -a -q)
 
 # Удаление всех образов
 docker rmi $(docker images -q)
+
+
+docker-compose run --rm certbot certonly --webroot -w /var/www/certbot --email sar-bc@mail.ru -d django.sar-bc.ru --agree-tos
