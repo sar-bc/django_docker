@@ -6,3 +6,109 @@ docker rmi $(docker images -q)
 
 
 docker-compose run --rm certbot certonly --webroot -w /var/www/certbot --email sar-bc@mail.ru -d django.sar-bc.ru --agree-tos
+
+# Для того что бы получить сертификат
+- в кофиге nginx должно быть
+======
+events {
+    worker_connections 1024;  # Максимальное количество одновременных соединений
+}
+
+http {
+    server_tokens off;  # Отключает отображение версии Nginx в заголовках
+    charset utf-8;  # Устанавливает кодировку по умолчанию на UTF-8
+
+    server {
+        listen 80;  # Слушает на порту 80 для HTTP запросов
+        server_name django.sar-bc.ru;  # Имя сервера
+
+        location /.well-known/acme-challenge/ {
+            alias /var/www/certbot/.well-known/acme-challenge/;  # Путь для валидации сертификатов
+            allow all;  # Разрешает доступ ко всем
+        }
+
+        location /media/ {
+        alias /app/media/;  # Убедись, что путь правильный
+        }
+
+        location /static/ {
+            alias /app/static/;  # Убедись, что путь правильный
+        }
+
+        location / {
+            proxy_pass http://app:8000/;  # Закомментированная строка для проксирования
+        }
+    }
+
+}
+
+=====
+- docker ps -a # проверяем запущен ли nginx если нет то docker-compose up -d nginx
+- docker exec -it nginx /bin/bash
+mkdir -p /var/www/certbot/.well-known/acme-challenge/
+echo "test" > /var/www/certbot/.well-known/acme-challenge/test.txt
+
+- Проверяем доступ curl http://django.sar-bc.ru/.well-known/acme-challenge/test.txt
+Если это работает и возвращает "test", значит, Nginx правильно настроен
+docker-compose run --rm certbot certonly --webroot -w /var/www/certbot --email sar-bc@mail.ru -d django.sar-bc.ru --agree-tos
+
+Потом когда сертификат обнавлен или добавлен изменить конфиг nginx
+=================
+
+events {
+    worker_connections 1024;  # Максимальное количество одновременных соединений
+}
+
+http {
+    server_tokens off;  # Отключает отображение версии Nginx в заголовках
+    charset utf-8;  # Устанавливает кодировку по умолчанию на UTF-8
+
+    server {
+        listen 80;  # Слушает на порту 80 для HTTP запросов
+        server_name django.sar-bc.ru;  # Имя сервера
+
+        location /.well-known/acme-challenge/ {
+            alias /var/www/certbot/.well-known/acme-challenge/;  # Путь для валидации сертификатов
+            allow all;  # Разрешает доступ ко всем
+        }
+
+        location /media/ {
+        alias /app/media/;  # Убедись, что путь правильный
+        }
+
+        location /static/ {
+            alias /app/static/;  # Убедись, что путь правильный
+        }
+
+        location / {
+            return 301 https://$host$request_uri;  # Перенаправление всех HTTP запросов на HTTPS
+            # proxy_pass http://app:8000/;  # Закомментированная строка для проксирования
+        }
+    }
+
+    server {
+        listen 443 ssl;  # Слушает на порту 443 для HTTPS запросов
+        server_name django.sar-bc.ru;  # Имя сервера
+
+        ssl_certificate /etc/letsencrypt/live/django.sar-bc.ru/fullchain.pem;  # Путь к сертификату
+        ssl_certificate_key /etc/letsencrypt/live/django.sar-bc.ru/privkey.pem;  # Путь к ключу
+
+        location /static/ {
+            alias /app/static/;  # Путь к статическим файлам Django
+        }
+
+        location /media/ {
+            alias /app/media/;  # Путь к медиафайлам Django
+        }
+
+        location / {
+            proxy_pass http://app:8000;  # Проксирует запросы к приложению Django
+            proxy_set_header Host $host;  # Передает заголовок Host
+            proxy_set_header X-Real-IP $remote_addr;  # Передает реальный IP клиента
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  # Передает проксированные IP
+            proxy_set_header X-Forwarded-Proto $scheme;  # Передает протокол (http или https)
+        }
+    }
+}
+
+==========================
