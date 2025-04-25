@@ -17,6 +17,8 @@ events {
 http {
     server_tokens off;  # Отключает отображение версии Nginx в заголовках
     charset utf-8;  # Устанавливает кодировку по умолчанию на UTF-8
+    include /etc/nginx/mime.types;  # Убедитесь, что это включено
+    default_type application/octet-stream;  # Установите тип по умолчанию
 
     server {
         listen 80;  # Слушает на порту 80 для HTTP запросов
@@ -62,7 +64,9 @@ events {
 http {
     server_tokens off;  # Отключает отображение версии Nginx в заголовках
     charset utf-8;  # Устанавливает кодировку по умолчанию на UTF-8
-
+    include /etc/nginx/mime.types;  # Убедитесь, что это включено
+    default_type application/octet-stream;  # Установите тип по умолчанию
+    
     server {
         listen 80;  # Слушает на порту 80 для HTTP запросов
         server_name django.sar-bc.ru;  # Имя сервера
