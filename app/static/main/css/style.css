@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap');
+
+:root {
+    --nav-item-green: green;
+    --bg-fon-navbar: #007cba;
+    /*#F97300;*/
+    --light-color: #fff;
+    --dropdown-item: #007cba;
+    --dropdown-item-hover: #007cba;
+    /*#F97300;*/
+    /*#f4f4f4;*/
+    --text-color: #4c4c4c;
+    /*Pagination*/
+    --bs-link-color: #007cba;
+    /*#F97300;*/
+    --bs-link-hover-color: #007cba;
+    /*#F97300;*/
+    --bs-pagination-active-bg: #007cba;
+    /*#F97300;*/
+    --bs-pagination-active-bg: #007cba;
+    /*#F97300;*/
+    --bs-pagination-active-border-color: #007cba;
+    /*#F97300;*/
+    --bs-pagination-active-bg: #007cba;
+    /*#F97300;*/
+    --bs-pagination-active-border-color: #007cba;
+    /*#F97300;*/
+
+}
+
+body {
+    font-family: 'Rubik', sans-serif;
+    min-width: 320px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+.title{
+    color: #007cba;
+}
