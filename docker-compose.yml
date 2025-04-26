@@ -7,7 +7,7 @@ services:
     build: ./app  # Построение образа Django из Dockerfile в папке ./app
     command: gunicorn vik.wsgi:application --bind 0.0.0.0:8000  # Запуск приложения с помощью Gunicorn
     volumes:
-      - ./app:/app  # Монтирование локальной папки ./app в контейнер
+      - ./app:/app  # Монтирование локальной папки ./app в контейнер 
     expose:
       - "8000"  # Указывает, что контейнер слушает на порту 8000 (только для связи между контейнерами)
 
@@ -27,35 +27,35 @@ services:
       - app  # Указывает, что Nginx зависит от контейнера app
      
 
-  certbot:
-    image: certbot/certbot  # Используемый образ Certbot
+  # certbot:
+  #   image: certbot/certbot  # Используемый образ Certbot
+  #   volumes:
+  #     - ./certbot/conf:/etc/letsencrypt  # Монтирование для сертификатов
+  #     - ./certbot/www:/var/www/certbot  # Монтирование для валидации
+
+
+  db:
+    image: mysql:5.7
+    container_name: mysql_db
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
     volumes:
-      - ./certbot/conf:/etc/letsencrypt  # Монтирование для сертификатов
-      - ./certbot/www:/var/www/certbot  # Монтирование для валидации
-
-
-#   db:
-#     image: mysql:5.7
-#     container_name: mysql_db
-#     env_file:
-#       - .env
-#     ports:
-#       - "3306:3306"
-#     volumes:
-#       - db_data:/var/lib/mysql
-#       - ./db_init/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
-#       - ./db_init/my.cnf:/etc/mysql/my.cnf
+      - db_data:/var/lib/mysql
+      - ./db_init/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - ./db_init/my.cnf:/etc/mysql/my.cnf
   
-#     restart: unless-stopped
+    restart: unless-stopped
     
-#   adminer:
-#     image: adminer
-#     container_name: adminer
-#     ports:
-#       - "8080:8080"
-#     depends_on:
-#       - db   
-#     restart: unless-stopped
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db   
+    restart: unless-stopped
 
-# volumes:
-#   db_data:    
+volumes:
+  db_data:    
