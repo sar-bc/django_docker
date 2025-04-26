@@ -1,20 +1,7 @@
 version: '3.8'
 
 services:
-  db:
-    image: mysql:5.7
-    container_name: mysql_db
-    env_file:
-      - .env
-    ports:
-      - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
-      - ./db_init/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
-      - ./db_init/my.cnf:/etc/mysql/my.cnf
-  
-    restart: unless-stopped
-
+ 
   app:
     container_name: app
     build: ./app  # Построение образа Django из Dockerfile в папке ./app
@@ -46,14 +33,29 @@ services:
       - ./certbot/conf:/etc/letsencrypt  # Монтирование для сертификатов
       - ./certbot/www:/var/www/certbot  # Монтирование для валидации
 
-  adminer:
-    image: adminer
-    container_name: adminer
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db   
-    restart: unless-stopped
 
-volumes:
-  db_data:    
+#   db:
+#     image: mysql:5.7
+#     container_name: mysql_db
+#     env_file:
+#       - .env
+#     ports:
+#       - "3306:3306"
+#     volumes:
+#       - db_data:/var/lib/mysql
+#       - ./db_init/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+#       - ./db_init/my.cnf:/etc/mysql/my.cnf
+  
+#     restart: unless-stopped
+    
+#   adminer:
+#     image: adminer
+#     container_name: adminer
+#     ports:
+#       - "8080:8080"
+#     depends_on:
+#       - db   
+#     restart: unless-stopped
+
+# volumes:
+#   db_data:    
